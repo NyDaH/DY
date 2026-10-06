@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta content="mobile_tab" name="shell-type"/>
+  <title>마인드파일 AI - 통합 스마트 플랫폼</title>
+  
+  <!-- Fonts & Material Symbols -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS CDN with configuration -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#4f46e5",
+            "primary-container": "#4f46e5",
+            "on-surface": "#0f172a",
+            "surface-container": "#f8fafc",
+            "secondary": "#10b981",
+            "error": "#ef4444"
+          },
+          fontFamily: {
+            body: ["Inter", "sans-serif"]
+          },
+          spacing: {
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "space-2xl": "2rem"
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        font-family: 'Inter', sans-serif;
+      }
+      body {
+        overscroll-behavior-y: none;
+        -webkit-tap-highlight-color: transparent;
+        min-height: max(884px, 100dvh);
+      }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+    }
+    ::-webkit-scrollbar { display: none; }
+    
+    .page-view {
+      transition: opacity 0.25s ease-in-out;
+    }
+    .page-view.hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body class="bg-[#ffffff] text-slate-900 flex flex-col min-h-screen">
+  <!-- Shared Fixed Top Header Bar -->
+  <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl pt-safe border-b border-slate-100 shadow-[0_1px_6px_rgba(0,0,0,0.03)]">
+    <div class="h-16 px-space-lg flex items-center justify-between gap-space-sm max-w-2xl mx-auto">
+      <div class="flex items-center gap-space-sm min-w-0">
+        <img alt="MindFile AI Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1Ugh9zqHGV4gc95ackOK-1pET4xX6egnykq-41Ygz08yQZc2nY1DLuQdEUXABY5Ywv02ehhZZNsQ8N03MgbGoXZz7_L969vjzbgJuYf23_qLBwR5ydAh-cCiq07m5eWM3K_deuKjjsvohoBlk2qxWTJHSwuCYDkLxvaUY-tnTmvNxhXFgU8msr7xPAeOZ3QPbMV9-Fb6UReDSeSBooY_MnPrgEC1Xq4UWZhzQ581131vfPc2Pmz96lZ7A"/>
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-space-xs">
+            <span class="font-bold text-slate-900 text-base tracking-tight truncate">마인드파일 AI</span>
+            <span id="header-status-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 font-bold text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span><span id="header-status-text">Live</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 flex-shrink-0">
+        <button aria-label="알림" class="w-10 h-10 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-colors relative">
+          <span class="material-symbols-outlined text-[22px]">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500"></span>
+        </button>
+        <div class="w-10 h-10 flex items-center justify-center">
+          <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-500/20 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2fKPpBiLOTHophlqNs-9g5lMLRspKtjald1LKEcO1DshhtvBs0GbncR413V23mPn8lLUd1uYoJRikVQEkp-WnDLrrPSD01Eus8mdUF4QOcyZFNM-JZfoUZtAtLSJx9UydEy7IJcji8uQtFvFTz8HcUlJgOh5wT-H0vqPZlB1eGV1Q2N_yejee0z_NYXhtfEhULrMGXCZI5-8ecgNPB3zYoXUJcOhg2JW63i0hhFet5POILXXHaHfM"/>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div id="app-container" class="w-full max-w-2xl mx-auto flex-1 flex flex-col">
+    
+    <!-- PAGE 1: p1.html (홈 / Home Dashboard) -->
+    <main id="page-p1" class="page-view flex-1 flex flex-col relative w-full pt-16 pb-28 bg-[#fafbff]">
+      <div class="flex flex-col w-full px-margin pb-space-2xl gap-space-xl">
+        <!-- 1. AI 실시간 스토리지 상태 인포그래픽 카드 -->
+        <section class="flex flex-col bg-white rounded-2xl p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] border border-slate-100/80 mt-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">donut_large</span>
+              </span>
+              <span class="font-bold text-slate-900 tracking-tight text-base">스토리지 인포그래픽</span>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/50">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> 실시간 최적화
+            </span>
+          </div>
+          
+          <!-- 대형 도넛 차트 및 핵심 지표 -->
+          <div class="flex items-center justify-between gap-3 my-4">
+            <div class="relative w-36 h-36 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" fill="none" r="48" stroke="#f1f5f9" stroke-width="11"></circle>
+                <circle cx="60" cy="60" fill="none" r="48" stroke="#4f46e5" stroke-dasharray="105.8 301.6" stroke-dashoffset="0" stroke-linecap="round" stroke-width="11"></circle>
+                <circle cx="60" cy="60" fill="none" r="48" stroke="#06b6d4" stroke-dasharray="75.4 301.6" stroke-dashoffset="-108" stroke-linecap="round" stroke-width="11"></circle>
+                <circle cx="60" cy="60" fill="none" r="48" stroke="#f59e0b" stroke-dasharray="26.2 301.6" stroke-dashoffset="-186" stroke-linecap="round" stroke-width="11"></circle>
+                <circle class="animate-pulse" cx="60" cy="60" fill="none" r="48" stroke="#ef4444" stroke-dasharray="14 301.6" stroke-dashoffset="-214" stroke-linecap="round" stroke-width="13"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-[11px] font-semibold text-slate-400">사용량</span>
+                <span class="text-2xl font-extrabold text-slate-900 tracking-tight">73<span class="text-base text-indigo-600">%</span></span>
+                <span class="text-[10px] font-medium text-slate-500">94.2/128G</span>
+              </div>
+            </div>
+            
+            <div class="flex flex-col justify-center flex-1 gap-2 min-w-0">
+              <div class="p-3 bg-gradient-to-r from-rose-500/10 via-amber-500/10 to-indigo-500/10 rounded-xl border border-rose-200/50 flex flex-col gap-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-rose-500 text-[18px]">auto_delete</span>
+                  <span class="text-xs font-bold text-slate-800">정리 대상 발견</span>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-2xl font-black text-rose-600 tracking-tight">+6.0 GB</span>
+                  <span class="text-[11px] font-bold text-slate-600">즉시 확보</span>
+                </div>
+                <span class="text-[10px] text-slate-500 truncate">불필요 캐시 & 중복 889개</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 4단 비비드 프로그레스 바 차트 -->
+          <div class="w-full">
+            <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden flex gap-1 p-0.5">
+              <div class="h-full bg-indigo-600 rounded-l-full" style="width: 35.1%;" title="사진 45GB"></div>
+              <div class="h-full bg-cyan-500" style="width: 25.0%;" title="동영상 32GB"></div>
+              <div class="h-full bg-amber-500" style="width: 8.7%;" title="문서 11.2GB"></div>
+              <div class="h-full bg-rose-500 animate-pulse rounded-r-full" style="width: 4.6%;" title="쓰레기 6.0GB"></div>
+            </div>
+            <div class="grid grid-cols-4 gap-1.5 mt-3 pt-1">
+              <div class="flex flex-col items-center bg-indigo-50/70 py-1.5 px-1 rounded-lg border border-indigo-100">
+                <div class="flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                  <span class="text-[10px] font-medium text-slate-600">사진</span>
+                </div>
+                <span class="text-[12px] font-bold text-indigo-950 mt-0.5">45 GB</span>
+              </div>
+              <div class="flex flex-col items-center bg-cyan-50/70 py-1.5 px-1 rounded-lg border border-cyan-100">
+                <div class="flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                  <span class="text-[10px] font-medium text-slate-600">동영상</span>
+                </div>
+                <span class="text-[12px] font-bold text-cyan-950 mt-0.5">32 GB</span>
+              </div>
+              <div class="flex flex-col items-center bg-amber-50/70 py-1.5 px-1 rounded-lg border border-amber-100">
+                <div class="flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span class="text-[10px] font-medium text-slate-600">문서</span>
+                </div>
+                <span class="text-[12px] font-bold text-amber-950 mt-0.5">11.2 GB</span>
+              </div>
+              <div class="flex flex-col items-center bg-rose-50/90 py-1.5 px-1 rounded-lg border border-rose-200">
+                <div class="flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                  <span class="text-[10px] font-bold text-rose-600">쓰레기</span>
+                </div>
+                <span class="text-[12px] font-bold text-rose-700 mt-0.5">6.0 GB</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 스마트 쓰레기 감지 & 원클릭 비우기 -->
+        <section class="flex flex-col gap-3">
+          <div class="flex items-center justify-between px-0.5">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-rose-500 text-[22px]" style="font-variation-settings: 'FILL' 1;">cleaning_services</span>
+              <h2 class="font-bold text-slate-900 tracking-tight text-base">스마트 쓰레기 감지</h2>
+            </div>
+            <span class="inline-flex items-center text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+              889개 감지
+            </span>
+          </div>
+          
+          <button class="w-full bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-600 hover:from-indigo-500 hover:to-violet-500 active:scale-[0.98] transition-all text-white p-4 rounded-2xl flex items-center justify-between shadow-[0_8px_20px_rgba(79,70,229,0.3)]" id="clean-all-btn">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-inner">
+                <span class="material-symbols-outlined text-[24px] text-amber-300" style="font-variation-settings: 'FILL' 1;">bolt</span>
+              </div>
+              <div class="flex flex-col text-left">
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-white tracking-tight text-base">6.0 GB 지금 즉시 비우기</span>
+                </div>
+                <span class="text-[11px] font-medium text-indigo-100">원클릭 AI 일괄 최적화</span>
+              </div>
+            </div>
+            <span class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-[20px]">arrow_forward</span>
+            </span>
+          </button>
+
+          <div class="flex flex-col gap-2.5">
+            <div class="bg-white p-3.5 rounded-2xl flex items-center justify-between shadow-sm border border-slate-100 hover:border-rose-200 transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0 relative">
+                  <span class="material-symbols-outlined text-[26px]">draft</span>
+                  <span class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">!</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-sm font-bold text-slate-900 truncate">무의미한 임시 파일</span>
+                    <span class="text-[10px] font-extrabold bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded">342개</span>
+                  </div>
+                  <div class="flex items-center gap-2 mt-1.5">
+                    <div class="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-full bg-rose-500 rounded-full" style="width: 65%;"></div>
+                    </div>
+                    <span class="text-xs font-bold text-rose-600">1.4 GB</span>
+                  </div>
+                </div>
+              </div>
+              <button onclick="navigateTo('p2')" class="flex-shrink-0 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors">검토</button>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-2xl flex items-center justify-between shadow-sm border border-slate-100 hover:border-emerald-200 transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined text-[26px]">content_copy</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-sm font-bold text-slate-900 truncate">중복 미디어 파일</span>
+                    <span class="text-[10px] font-extrabold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">카톡·웹 128건</span>
+                  </div>
+                  <div class="flex items-center gap-2 mt-1.5">
+                    <div class="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-full bg-emerald-500 rounded-full" style="width: 85%;"></div>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-600">3.2 GB</span>
+                  </div>
+                </div>
+              </div>
+              <button onclick="navigateTo('p2')" class="flex-shrink-0 px-3.5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-colors shadow-sm shadow-emerald-500/20">통합</button>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-2xl flex items-center justify-between shadow-sm border border-slate-100 hover:border-amber-200 transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined text-[26px]">timer</span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-sm font-bold text-slate-900 truncate">30일 만료 스크린샷</span>
+                    <span class="text-[10px] font-extrabold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">419개</span>
+                  </div>
+                  <div class="flex items-center gap-2 mt-1.5">
+                    <div class="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div class="h-full bg-amber-500 rounded-full" style="width: 50%;"></div>
+                    </div>
+                    <span class="text-xs font-bold text-amber-600">1.4 GB</span>
+                  </div>
+                </div>
+              </div>
+              <button onclick="navigateTo('p2')" class="flex-shrink-0 px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-colors">정리</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. AI 비전 스마트 폴더 -->
+        <section class="flex flex-col gap-3">
+          <div class="flex items-center justify-between px-0.5">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-indigo-600 text-[22px]" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+              <h2 class="font-bold text-slate-900 tracking-tight text-base">AI 비전 스마트 폴더</h2>
+            </div>
+            <button onclick="navigateTo('p2')" class="text-xs font-bold text-indigo-600 hover:text-indigo-700">전체보기</button>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div onclick="navigateTo('p2')" class="bg-gradient-to-br from-indigo-50/80 to-white p-3.5 rounded-2xl border border-indigo-100 flex flex-col justify-between h-36 relative overflow-hidden shadow-sm active:scale-[0.98] transition-transform cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm shadow-indigo-600/30">
+                  <span class="material-symbols-outlined text-[22px]">receipt_long</span>
+                </div>
+                <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-white text-indigo-700 shadow-sm border border-indigo-100">84건</span>
+              </div>
+              <div class="flex flex-col z-10">
+                <span class="text-xs font-extrabold text-slate-900">영수증 & 명세서</span>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-[10px] font-bold text-emerald-600 bg-emerald-100/80 px-1.5 py-0.5 rounded">OCR</span>
+                  <span class="text-[11px] font-semibold text-slate-500">스타벅스 외</span>
+                </div>
+              </div>
+            </div>
+
+            <div onclick="navigateTo('p3')" class="bg-gradient-to-br from-violet-50/80 to-white p-3.5 rounded-2xl border border-violet-100 flex flex-col justify-between h-36 relative overflow-hidden shadow-sm active:scale-[0.98] transition-transform cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-violet-600 text-white flex items-center justify-center shadow-sm shadow-violet-600/30">
+                  <span class="material-symbols-outlined text-[22px]">document_scanner</span>
+                </div>
+                <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-white text-violet-700 shadow-sm border border-violet-100">320건</span>
+              </div>
+              <div class="flex flex-col z-10">
+                <span class="text-xs font-extrabold text-slate-900">텍스트 스크린샷</span>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-[10px] font-bold text-violet-600 bg-violet-100/80 px-1.5 py-0.5 rounded">키워드</span>
+                  <span class="text-[11px] font-semibold text-slate-500">인덱싱 완료</span>
+                </div>
+              </div>
+            </div>
+
+            <div onclick="navigateTo('p3')" class="bg-gradient-to-br from-emerald-50/80 to-white p-3.5 rounded-2xl border border-emerald-100 flex flex-col justify-between h-36 relative overflow-hidden shadow-sm active:scale-[0.98] transition-transform cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm shadow-emerald-600/30">
+                  <span class="material-symbols-outlined text-[22px]">folder_open</span>
+                </div>
+                <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-white text-emerald-700 shadow-sm border border-emerald-100">45건</span>
+              </div>
+              <div class="flex flex-col z-10">
+                <span class="text-xs font-extrabold text-slate-900">프로젝트 & 업무</span>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded">PDF·문서</span>
+                  <span class="text-[11px] font-semibold text-slate-500">1.8 GB</span>
+                </div>
+              </div>
+            </div>
+
+            <div onclick="navigateTo('p2')" class="bg-gradient-to-br from-rose-50/80 to-white p-3.5 rounded-2xl border border-rose-100 flex flex-col justify-between h-36 relative overflow-hidden shadow-sm active:scale-[0.98] transition-transform cursor-pointer">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm shadow-rose-600/30">
+                  <span class="material-symbols-outlined text-[22px]">video_file</span>
+                </div>
+                <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-white text-rose-700 shadow-sm border border-rose-100">18건</span>
+              </div>
+              <div class="flex flex-col z-10">
+                <span class="text-xs font-extrabold text-slate-900">고용량 중복 동영상</span>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-[10px] font-bold text-rose-600 bg-rose-100/80 px-1.5 py-0.5 rounded animate-pulse">압축권장</span>
+                  <span class="text-[11px] font-semibold text-rose-600">32 GB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 실시간 AI 스마트 분석 -->
+        <section class="flex flex-col gap-3">
+          <div class="flex items-center justify-between px-0.5">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-indigo-600 text-[22px]" style="font-variation-settings: 'FILL' 1;">radar</span>
+              <h2 class="font-bold text-slate-900 tracking-tight text-base">실시간 AI 스마트 분석</h2>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200/60">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping"></span> 실시간 인덱싱
+            </span>
+          </div>
+
+          <div class="bg-white rounded-2xl p-3 flex gap-3 shadow-sm border border-slate-100 items-center">
+            <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 relative shadow-inner">
+              <img class="w-full h-full object-cover" alt="영수증" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0eG7B37LXN32vaQ5uEbTN0kJok0V0yR_4cKejdCy_JOUim_yV0oMdbab4elYgkCsCS3djQcs0sHcfSTwWaX7DTfRoFg-NtvWhYeNG_kol8sNya-3TR_DfoozlGb7ZKBVKa4eUoEZDsaCsRiixIergdEcrDKGjnNP9eDsSzMWGZSMuWJSKP51Sno-VfbAh2KL443vZTg3ncusCbhkEHH4HxzBJ1nwvi11s1pEDucknwrWfPsWUkOYM"/>
+              <span class="absolute bottom-1 right-1 bg-emerald-600 text-white text-[9px] font-extrabold px-1 rounded">OCR</span>
+            </div>
+            <div class="flex flex-col justify-between flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-bold text-slate-900 truncate">스타벅스 결제전표</span>
+                <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded-full flex-shrink-0">OCR 99%</span>
+              </div>
+              <div class="flex flex-wrap gap-1 mt-1.5">
+                <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">#법인식대</span>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">#자동승인</span>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">₩18,500</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- PAGE 2: p2.html (스마트분류 / Smart Categorize) -->
+    <main id="page-p2" class="page-view hidden flex-1 flex flex-col relative w-full pt-16 pb-28 bg-white">
+      <div class="flex flex-col w-full">
+        <!-- Top Visual Search & Segment Infographic Controls -->
+        <div class="px-margin pt-space-md pb-space-xs flex flex-col gap-3">
+          <div class="relative w-full rounded-2xl bg-slate-50 border border-slate-200/80 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 transition-all">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-primary">
+              <span class="material-symbols-outlined text-[20px]">manage_search</span>
+            </div>
+            <input class="w-full pl-10 pr-24 py-2.5 bg-transparent font-body-sm text-body-sm text-slate-800 placeholder:text-slate-400 focus:outline-none" placeholder="OCR·시각 검색..." type="text"/>
+            <div class="absolute inset-y-0 right-1.5 flex items-center gap-1">
+              <button class="px-2 py-1 rounded-lg bg-indigo-600 text-white font-label-sm text-[11px] shadow-sm flex items-center gap-0.5 font-bold">
+                <span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+                <span>AI 분석</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Source Distribution Pie / Visual Metric Pills -->
+          <div class="bg-gradient-to-r from-slate-50 to-indigo-50/40 p-3 rounded-2xl border border-slate-200/70 flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="relative w-7 h-7 flex-shrink-0">
+                  <svg class="w-7 h-7 -rotate-90" viewBox="0 0 36 36">
+                    <circle cx="18" cy="18" fill="none" r="14" stroke="#e2e8f0" stroke-width="4"></circle>
+                    <circle cx="18" cy="18" fill="none" r="14" stroke="#4f46e5" stroke-dasharray="45 100" stroke-linecap="round" stroke-width="4"></circle>
+                    <circle cx="18" cy="18" fill="none" r="14" stroke="#06b6d4" stroke-dasharray="25 100" stroke-dashoffset="-45" stroke-linecap="round" stroke-width="4"></circle>
+                    <circle cx="18" cy="18" fill="none" r="14" stroke="#f59e0b" stroke-dasharray="20 100" stroke-dashoffset="-70" stroke-linecap="round" stroke-width="4"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center font-bold text-[8px] text-slate-700">1.3k</div>
+                </div>
+                <span class="text-xs text-slate-800 font-bold">출처별 인덱싱</span>
+              </div>
+              <span class="text-[11px] text-indigo-600 font-bold bg-indigo-100/70 px-2 py-0.5 rounded-full">실시간 자동감지</span>
+            </div>
+
+            <div class="grid grid-cols-4 gap-1.5">
+              <button class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl bg-indigo-600 text-white shadow-sm ring-1 ring-indigo-700/20 active:scale-95 transition-all">
+                <span class="text-sm font-extrabold leading-none">1,280</span>
+                <span class="text-[10px] text-indigo-100 mt-0.5">전체</span>
+              </button>
+              <button class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 border border-amber-500/30 active:scale-95 transition-all">
+                <div class="flex items-center gap-0.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  <span class="text-sm font-bold leading-none">482</span>
+                </div>
+                <span class="text-[10px] text-amber-800 mt-0.5">카톡</span>
+              </button>
+              <button class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-700 border border-cyan-500/30 active:scale-95 transition-all">
+                <div class="flex items-center gap-0.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                  <span class="text-sm font-bold leading-none">310</span>
+                </div>
+                <span class="text-[10px] text-cyan-800 mt-0.5">웹</span>
+              </button>
+              <button class="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-700 border border-purple-500/30 active:scale-95 transition-all">
+                <div class="flex items-center gap-0.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                  <span class="text-sm font-bold leading-none">412</span>
+                </div>
+                <span class="text-[10px] text-purple-800 mt-0.5">카메라</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sorting Chips -->
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-xs text-slate-500 font-semibold flex items-center gap-1">
+              <span class="material-symbols-outlined text-[15px] text-indigo-500">sort</span> 정렬
+            </span>
+            <div class="flex items-center gap-1.5">
+              <button class="px-2.5 py-1 rounded-full bg-indigo-600 text-white text-[11px] font-bold shadow-sm shadow-indigo-200">출처순</button>
+              <button class="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold">용량순</button>
+              <button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 text-[11px] font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 신뢰도순
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Media Spectrum Chart -->
+        <div class="px-margin my-2">
+          <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/80">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[18px] text-indigo-600">stacked_bar_chart</span>
+                <span class="text-xs text-slate-800 font-bold">미디어 분포 스펙트럼</span>
+              </div>
+              <span class="text-[11px] text-slate-500">총 3개 클러스터</span>
+            </div>
+            <div class="h-3 w-full rounded-full bg-slate-200 flex overflow-hidden p-0.5 shadow-inner">
+              <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-l-full" style="width: 40%"></div>
+              <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 mx-0.5" style="width: 35%"></div>
+              <div class="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-r-full" style="width: 25%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-2 pt-1 text-[11px]">
+              <span class="inline-flex items-center gap-1 font-bold text-emerald-700">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 영수증 40%
+              </span>
+              <span class="inline-flex items-center gap-1 font-bold text-indigo-700">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 스크린샷 35%
+              </span>
+              <span class="inline-flex items-center gap-1 font-bold text-amber-700">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 다운로드 25%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categorized Cards -->
+        <div class="px-margin flex flex-col gap-2.5 pb-20">
+          <!-- Card 1: Receipt -->
+          <div class="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] relative flex items-center justify-between gap-3 hover:border-emerald-300 transition-all">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 ring-1 ring-slate-200">
+                <img class="w-full h-full object-cover" alt="영수증" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeVtDbwUSZ1FPkuZzG67iecTI9p-Rc1-xMSmkdzQESEQrqYK52RAridUJ4X7R5QUg0BLI_FSOgnulUlHdZ4E0jf8CUVjwsXXLAPayBN6O1PZ763nosvwSBOGLoEO5ZNt4SdjtSx03w9O8bVtxeo9nohV78-FQZq7nQB044hrRRcX6Q8Zyi_0mw1cyoVipDACZ3coSt7F706rOQvrtRKFpGcwIHsrS9IiC4Bb2LsN6T6k2yd9_Kg2Sf"/>
+                <div class="absolute bottom-1 left-1 w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[11px] font-bold">check</span>
+                </div>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2 py-0.5 rounded-lg bg-emerald-600 text-white text-sm font-extrabold shadow-sm">₩18,500</span>
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-300 text-[11px] font-bold">OCR 99%</span>
+                </div>
+                <div class="flex items-center gap-1 flex-wrap mt-1.5">
+                  <span class="px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 text-[11px] font-bold border border-teal-200">지출결의서</span>
+                  <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[11px] font-bold border border-blue-200">법인카드</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="navigateTo('p3')" class="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-600 active:scale-90 text-white flex items-center justify-center shadow-md flex-shrink-0 transition-transform" title="스마트 이동">
+              <span class="material-symbols-outlined text-[20px]">drive_file_move</span>
+            </button>
+          </div>
+
+          <!-- Card 2: UI Design -->
+          <div class="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] relative flex items-center justify-between gap-3 hover:border-indigo-300 transition-all">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 ring-1 ring-slate-200">
+                <img class="w-full h-full object-cover" alt="UI Screenshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB79ZdfWf0c1zKW7vd4hr2r4wLHplNmARZxGTJhdEsI_GgTzGuDyQAm0RShyGHxkQjSoDFJNlotgXDrk8B6PJ58eEDOQSciTCj_82u5NGgQu_X5L_yHtx3UAoeg1tZmHzZtpMEP123Dvw2q91MOQmwAB-fmUIbK0hVApP-TcM1w_UAHsLsgF3kqu8V0u6lyggWgnZHDDI8QdyhNbCJ9JCzgV_N_ghh18rF4qtzCgfGb5QnmWAXCOxLV"/>
+                <div class="absolute bottom-1 left-1 w-4 h-4 rounded-full bg-indigo-600 text-white flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[11px] font-bold">check</span>
+                </div>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2 py-0.5 rounded-lg bg-indigo-600 text-white text-xs font-bold shadow-sm">비전 AI</span>
+                  <span class="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-300 text-[11px] font-bold">UI디자인</span>
+                </div>
+                <div class="flex items-center gap-1 flex-wrap mt-1.5">
+                  <span class="px-2 py-0.5 rounded-md bg-violet-100/70 text-violet-800 text-[11px] font-bold">#대시보드</span>
+                  <span class="px-2 py-0.5 rounded-md bg-blue-100/70 text-blue-800 text-[11px] font-bold">#차트</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="navigateTo('p3')" class="w-10 h-10 rounded-full bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white border border-indigo-200 active:scale-90 flex items-center justify-center flex-shrink-0 transition-all shadow-sm" title="연관 맵 연결">
+              <span class="material-symbols-outlined text-[20px]">hub</span>
+            </button>
+          </div>
+
+          <!-- Card 3: Duplicate PDF -->
+          <div class="bg-rose-50/40 rounded-2xl p-3 border-2 border-rose-200 shadow-sm relative flex flex-col gap-2 hover:border-rose-400 transition-all">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="relative w-12 h-12 flex-shrink-0 flex items-center justify-center">
+                  <div class="absolute w-8 h-10 rounded bg-rose-200 -rotate-6 border border-rose-300"></div>
+                  <div class="absolute w-8 h-10 rounded bg-white shadow-sm flex flex-col items-center justify-center border border-rose-400 text-rose-600">
+                    <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                    <span class="text-[8px] font-bold">PDF</span>
+                  </div>
+                  <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+                  </span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="px-2 py-0.5 rounded-md bg-rose-600 text-white text-[11px] font-bold">100% 중복</span>
+                    <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[11px] font-extrabold">+840KB 절약</span>
+                  </div>
+                  <span class="text-[12px] text-slate-800 font-bold truncate mt-0.5">사업자등록증_최종(2).pdf</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1 flex-shrink-0">
+                <button onclick="navigateTo('p3')" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-black text-white text-xs font-bold flex items-center gap-1 shadow-sm active:scale-95 transition-all">
+                  <span class="material-symbols-outlined text-[15px]">call_merge</span>
+                  <span>병합</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- PAGE 3: p3.html (연관 맵 / Relation Map) -->
+    <main id="page-p3" class="page-view hidden flex-1 flex flex-col relative w-full pt-16 pb-28 bg-[#fafbff]">
+      <div class="flex flex-col w-full px-margin pb-space-2xl gap-3">
+        <!-- 상단 뷰 스위처 -->
+        <div class="pt-3 flex items-center justify-between bg-slate-100 p-1 rounded-full">
+          <button class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full bg-white text-indigo-600 shadow-sm font-bold text-xs transition-all">
+            <span class="material-symbols-outlined text-[17px]" style="font-variation-settings: 'FILL' 1;">hub</span>
+            <span>연관 마인드맵</span>
+          </button>
+          <button onclick="navigateTo('p2')" class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full text-slate-500 hover:text-slate-800 font-semibold text-xs transition-colors">
+            <span class="material-symbols-outlined text-[17px]">view_kanban</span>
+            <span>클러스터보드</span>
+          </button>
+          <button onclick="navigateTo('p1')" class="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full text-slate-500 hover:text-slate-800 font-semibold text-xs transition-colors">
+            <span class="material-symbols-outlined text-[17px]">timeline</span>
+            <span>타임라인</span>
+          </button>
+        </div>
+
+        <!-- 1. 가시적 공간 확보 대시보드 -->
+        <section class="flex flex-col bg-white rounded-2xl p-4 shadow-[0_4px_24px_rgba(15,23,42,0.06)] border border-slate-100/90">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">cloud_sync</span>
+              </span>
+              <span class="font-bold text-slate-900 tracking-tight text-base">가시적 공간 확보</span>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/70 border border-emerald-300/60 px-2.5 py-1 rounded-full animate-pulse shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> +5.4 GB 즉시 회수 가능
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between gap-3 my-3">
+            <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" fill="none" r="40" stroke="#f1f5f9" stroke-width="9"></circle>
+                <circle cx="50" cy="50" fill="none" r="40" stroke="#10b981" stroke-dasharray="206 251.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="9.5"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-[10px] font-bold text-slate-400">쾌적도</span>
+                <span class="text-xl font-black text-slate-900 tracking-tight">82<span class="text-xs text-emerald-600 font-extrabold">%</span></span>
+                <span class="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1 rounded">목표 달성</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-center flex-1 gap-1.5 min-w-0">
+              <div class="grid grid-cols-2 gap-1.5">
+                <div class="bg-indigo-50/70 p-2 rounded-xl border border-indigo-100/80 flex flex-col">
+                  <span class="text-[10px] font-medium text-slate-500">현재 사용량</span>
+                  <span class="text-sm font-extrabold text-indigo-950">14.2 GB</span>
+                </div>
+                <div class="bg-emerald-50/80 p-2 rounded-xl border border-emerald-200/80 flex flex-col">
+                  <span class="text-[10px] font-bold text-emerald-700">정리 후 잔여</span>
+                  <span class="text-sm font-black text-emerald-600">8.8 GB</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between px-1 text-[10px] text-slate-500">
+                <span>전체 64 GB</span>
+                <span class="font-bold text-slate-700">분석 노드 4개 매핑됨</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full">
+            <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden flex gap-0.5 p-0.5">
+              <div class="h-full bg-emerald-500 rounded-l-full" style="width: 26%;" title="업무 TFT 2.4GB"></div>
+              <div class="h-full bg-indigo-600" style="width: 14%;" title="학업 1.2GB"></div>
+              <div class="h-full bg-amber-500" style="width: 8%;" title="스크린샷 340MB"></div>
+              <div class="h-full bg-rose-500 animate-pulse rounded-r-full" style="width: 52%;" title="정리 권장 3.8GB"></div>
+            </div>
+            <div class="grid grid-cols-4 gap-1 mt-2 text-[10px] text-center font-bold">
+              <span class="text-emerald-700 bg-emerald-50/80 py-0.5 rounded">● 업무 2.4G</span>
+              <span class="text-indigo-700 bg-indigo-50/80 py-0.5 rounded">● 학업 1.2G</span>
+              <span class="text-amber-700 bg-amber-50/80 py-0.5 rounded">● 캡처 340M</span>
+              <span class="text-rose-700 bg-rose-50/90 py-0.5 rounded animate-pulse">● 쓰레기 3.8G</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 중앙 인터랙티브 마인드맵 캔버스 -->
+        <section class="relative w-full rounded-2xl bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(15,23,42,0.05)] overflow-hidden min-h-[460px] flex items-center justify-center select-none" style="background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px); background-size: 18px 18px;">
+          <!-- SVG 점선 링크 레이어 -->
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gradEmerald" x1="50%" x2="25%" y1="50%" y2="20%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.8"></stop>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0.9"></stop>
+              </linearGradient>
+              <linearGradient id="gradIndigo" x1="50%" x2="75%" y1="50%" y2="20%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.8"></stop>
+                <stop offset="100%" stop-color="#6366f1" stop-opacity="0.9"></stop>
+              </linearGradient>
+              <linearGradient id="gradAmber" x1="50%" x2="25%" y1="50%" y2="80%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.8"></stop>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.9"></stop>
+              </linearGradient>
+              <linearGradient id="gradRose" x1="50%" x2="75%" y1="50%" y2="80%">
+                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.9"></stop>
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="1"></stop>
+              </linearGradient>
+            </defs>
+            <path d="M 180 230 C 130 220, 95 150, 85 100" fill="none" stroke="url(#gradEmerald)" stroke-dasharray="5,4" stroke-width="2.5"></path>
+            <path d="M 190 230 C 235 220, 275 150, 280 100" fill="none" stroke="url(#gradIndigo)" stroke-dasharray="5,4" stroke-width="2.5"></path>
+            <path d="M 175 245 C 130 260, 95 320, 88 350" fill="none" stroke="url(#gradAmber)" stroke-dasharray="5,4" stroke-width="2.5"></path>
+            <path class="animate-pulse" d="M 195 245 C 240 265, 275 320, 280 350" fill="none" stroke="url(#gradRose)" stroke-dasharray="6,3" stroke-width="3.5"></path>
+          </svg>
+
+          <!-- 마인드맵 센터 허브 -->
+          <div class="z-30 w-24 h-24 rounded-full bg-gradient-to-tr from-indigo-600 via-indigo-700 to-violet-600 text-white flex flex-col items-center justify-center shadow-[0_0_30px_rgba(79,70,229,0.4)] border-4 border-white active:scale-95 transition-transform cursor-pointer">
+            <span class="material-symbols-outlined text-[26px]">hub</span>
+            <span class="text-[11px] font-black tracking-tight mt-0.5">Mind AI</span>
+            <span class="text-[8px] font-bold text-indigo-200">중앙 허브</span>
+          </div>
+
+          <!-- 노드 1: Top-Left (업무 TFT) -->
+          <div class="absolute top-6 left-3 z-20 w-36 rounded-2xl bg-white p-2.5 shadow-md border-2 border-emerald-400 active:scale-95 transition-transform cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-[9px] border border-emerald-200">
+                업무 TFT
+              </span>
+              <span class="font-extrabold text-emerald-600 text-[11px]">2.4 GB</span>
+            </div>
+            <div class="font-bold text-slate-900 text-[11px] truncate">브랜드 리뉴얼</div>
+            <div class="mt-1 text-[9px] text-emerald-700 font-bold bg-emerald-100/80 px-1 py-0.5 rounded inline-block">
+              ⚡ 620MB 압축가능
+            </div>
+          </div>
+
+          <!-- 노드 2: Top-Right (학업 & 강의) -->
+          <div class="absolute top-6 right-3 z-20 w-36 rounded-2xl bg-white p-2.5 shadow-md border-2 border-indigo-400 active:scale-95 transition-transform cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-extrabold text-[9px] border border-indigo-200">
+                학업/강의
+              </span>
+              <span class="font-extrabold text-indigo-600 text-[11px]">1.2 GB</span>
+            </div>
+            <div class="font-bold text-slate-900 text-[11px] truncate">AI 프로그래밍</div>
+            <div class="mt-1 text-[9px] text-indigo-700 font-bold bg-indigo-100/80 px-1 py-0.5 rounded inline-block">
+              📚 PDF 35개 매핑
+            </div>
+          </div>
+
+          <!-- 노드 3: Bottom-Left (스크린샷 & OCR) -->
+          <div class="absolute bottom-6 left-3 z-20 w-36 rounded-2xl bg-white p-2.5 shadow-md border-2 border-amber-400 active:scale-95 transition-transform cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 font-extrabold text-[9px] border border-amber-200">
+                스크린샷
+              </span>
+              <span class="font-extrabold text-amber-600 text-[11px]">340 MB</span>
+            </div>
+            <div class="font-bold text-slate-900 text-[11px] truncate">영수증 OCR 84건</div>
+            <div class="mt-1 text-[9px] text-amber-800 font-bold bg-amber-100/80 px-1 py-0.5 rounded inline-block">
+              🔍 자동 태깅 완료
+            </div>
+          </div>
+
+          <!-- 노드 4: Bottom-Right (고용량 정리) -->
+          <div class="absolute bottom-6 right-3 z-20 w-36 rounded-2xl bg-white p-2.5 shadow-md border-2 border-rose-400 active:scale-95 transition-transform cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-700 font-extrabold text-[9px] border border-rose-200">
+                정리 권장
+              </span>
+              <span class="font-extrabold text-rose-600 text-[11px]">3.8 GB</span>
+            </div>
+            <div class="font-bold text-slate-900 text-[11px] truncate">중복 동영상 18건</div>
+            <div class="mt-1 text-[9px] text-rose-700 font-extrabold bg-rose-100 px-1 py-0.5 rounded inline-block animate-pulse">
+              🚨 즉시 정리 대상
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- PAGE 6: p6.html (맞춤배치 / Smart Layout & Customization) -->
+    <main id="page-p6" class="page-view hidden flex-1 flex flex-col relative w-full pt-16 pb-28 bg-[#f8fafc]">
+      <div class="flex flex-col w-full px-margin pb-space-2xl gap-4">
+        <!-- 맞춤배치 Header Banner -->
+        <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden mt-3">
+          <div class="flex items-center justify-between relative z-10">
+            <div class="flex flex-col">
+              <span class="text-[11px] font-bold text-indigo-300 tracking-wider uppercase">AI Dashboard Personalization</span>
+              <h2 class="text-lg font-black tracking-tight mt-0.5">스마트 맞춤 배치 관리</h2>
+              <p class="text-xs text-indigo-100/80 mt-1">사용 패턴에 맞춰 대시보드 위젯을 자유롭게 구성하세요.</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+              <span class="material-symbols-outlined text-[28px] text-indigo-300">dashboard_customize</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Layout Presets -->
+        <section class="flex flex-col gap-2">
+          <span class="text-xs font-bold text-slate-800 px-1">추천 프리셋 레이아웃</span>
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="setPreset('storage')" class="bg-white p-3 rounded-2xl border-2 border-indigo-500 shadow-sm flex flex-col gap-1.5 text-left active:scale-[0.98] transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-indigo-950">스토리지 최적화형</span>
+                <span class="material-symbols-outlined text-[18px] text-indigo-600">check_circle</span>
+              </div>
+              <span class="text-[10px] text-slate-500">용량 확보 및 정리 위젯 우선 배치</span>
+            </button>
+
+            <button onclick="setPreset('media')" class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-1.5 text-left active:scale-[0.98] transition-all hover:border-indigo-300">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-slate-800">미디어 집중형</span>
+                <span class="material-symbols-outlined text-[18px] text-slate-300">circle</span>
+              </div>
+              <span class="text-[10px] text-slate-500">OCR, 이미지 검색 및 시각 뷰 중심</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Dynamic Widget Rearrange Grid -->
+        <section class="flex flex-col gap-2">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-xs font-bold text-slate-800">활성화된 위젯 블록 (4개)</span>
+            <button class="text-[11px] font-bold text-indigo-600 hover:text-indigo-700">+ 위젯 추가</button>
+          </div>
+
+          <div class="flex flex-col gap-2.5">
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-slate-400 cursor-grab">drag_indicator</span>
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">donut_large</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold text-slate-900">실시간 스토리지 게이지</span>
+                  <span class="text-[10px] text-slate-500">도넛 인포그래픽 & 용량 지표</span>
+                </div>
+              </div>
+              <input type="checkbox" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"/>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-slate-400 cursor-grab">drag_indicator</span>
+                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">bolt</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold text-slate-900">원클릭 AI 청소 액션</span>
+                  <span class="text-[10px] text-slate-500">번개 스마트 정리 버턴</span>
+                </div>
+              </div>
+              <input type="checkbox" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"/>
+            </div>
+
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-slate-400 cursor-grab">drag_indicator</span>
+                <div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">hub</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold text-slate-900">연관 마인드맵 노드</span>
+                  <span class="text-[10px] text-slate-500">스마트 클러스터 노드 시각화</span>
+                </div>
+              </div>
+              <input type="checkbox" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"/>
+            </div>
+          </div>
+        </section>
+
+        <button onclick="applyLayout()" class="w-full bg-slate-900 hover:bg-black text-white p-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+          <span class="material-symbols-outlined text-[18px]">save</span>
+          <span>맞춤 배치 저장 & 적용</span>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- MASTER BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/95 backdrop-blur-xl border-t border-slate-100 shadow-[0_-4px_20px_rgba(15,23,42,0.04)]">
+    <div class="flex justify-around items-center h-16 px-space-xs max-w-2xl mx-auto">
+      <!-- Nav Child 1 -> p1.html -->
+      <a href="#" onclick="navigateTo('p1'); return false;" class="nav-item flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-space-xs py-1 transition-colors text-indigo-600 font-bold" data-page="p1">
+        <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">auto_awesome_mosaic</span>
+        <span class="text-[11px]">홈</span>
+      </a>
+      <!-- Nav Child 2 -> p2.html -->
+      <a href="#" onclick="navigateTo('p2'); return false;" class="nav-item flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-space-xs py-1 text-slate-400 hover:text-slate-700 transition-colors" data-page="p2">
+        <span class="material-symbols-outlined text-[24px]">folder_supervised</span>
+        <span class="text-[11px]">스마트분류</span>
+      </a>
+      <!-- Nav Child 3 -> p3.html -->
+      <a href="#" onclick="navigateTo('p3'); return false;" class="nav-item flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-space-xs py-1 text-slate-400 hover:text-slate-700 transition-colors" data-page="p3">
+        <span class="material-symbols-outlined text-[24px]">hub</span>
+        <span class="text-[11px]">연관 맵</span>
+      </a>
+      <!-- Nav Child 4 -> p6.html -->
+      <a href="#" onclick="navigateTo('p6'); return false;" class="nav-item flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-space-xs py-1 text-slate-400 hover:text-slate-700 transition-colors" data-page="p6">
+        <span class="material-symbols-outlined text-[24px]">dashboard_customize</span>
+        <span class="text-[11px]">맞춤배치</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    // SPA Router switching function
+    function navigateTo(pageId) {
+      const pages = ['p1', 'p2', 'p3', 'p6'];
+      
+      pages.forEach(p => {
+        const pageEl = document.getElementById('page-' + p);
+        if (pageEl) {
+          if (p === pageId) {
+            pageEl.classList.remove('hidden');
+          } else {
+            pageEl.classList.add('hidden');
+          }
+        }
+      });
+
+      // Update Bottom Navigation Styling
+      const navItems = document.querySelectorAll('nav a.nav-item');
+      navItems.forEach(item => {
+        const isTarget = item.getAttribute('data-page') === pageId;
+        const icon = item.querySelector('.material-symbols-outlined');
+        
+        if (isTarget) {
+          item.className = "nav-item flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-space-xs py-1 transition-colors text-indigo-600 font-bold";
+          if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+        } else {
+          item.className = "nav-item flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] px-space-xs py-1 text-slate-400 hover:text-slate-700 transition-colors";
+          if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+        }
+      });
+
+      // Update Top Status Badge depending on page
+      const badgeText = document.getElementById('header-status-text');
+      if (badgeText) {
+        if (pageId === 'p1') badgeText.innerText = 'Live';
+        else if (pageId === 'p2') badgeText.innerText = 'AI 스마트분류';
+        else if (pageId === 'p3') badgeText.innerText = '마인드맵 인덱스';
+        else if (pageId === 'p6') badgeText.innerText = '맞춤배치 모드';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // p1 Clean All Button Animation
+    const cleanBtn = document.getElementById('clean-all-btn');
+    if (cleanBtn) {
+      cleanBtn.addEventListener('click', () => {
+        cleanBtn.innerHTML = `
+          <div class="flex items-center justify-center gap-2 w-full py-1 text-white">
+            <span class="material-symbols-outlined text-[24px] animate-spin text-white">sync</span>
+            <span class="font-bold text-white text-base">6.0 GB 공간 확보 중...</span>
+          </div>
+        `;
+        cleanBtn.classList.add('opacity-90');
+        
+        setTimeout(() => {
+          cleanBtn.innerHTML = `
+            <div class="flex items-center justify-center gap-2 w-full py-1 text-white">
+              <span class="material-symbols-outlined text-[24px] text-white">check_circle</span>
+              <span class="font-bold text-white text-base">6.0 GB 정리 완료!</span>
+            </div>
+          `;
+          cleanBtn.className = "w-full bg-emerald-500 text-white p-4 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 transition-all";
+        }, 1200);
+      });
+    }
+
+    // Preset & layout actions for p6
+    function setPreset(type) {
+      alert('‘' + (type === 'storage' ? '스토리지 최적화형' : '미디어 집중형') + '’ 프리셋이 선택되었습니다.');
+    }
+
+    function applyLayout() {
+      navigateTo('p1');
+    }
+  </script>
+</body>
+</html>
